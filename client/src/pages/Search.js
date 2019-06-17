@@ -4,16 +4,18 @@ import API from "../utils/API";
 import Nav from "../components/Nav";
 import Button from "../components/Button";
 import Input from "../components/Input";
-import { BookDetail, BookListItem } from "../components/BookDetail";
+import BookDetail from "../components/BookDetail";
 import { Container, Row, Col } from "../components/Grid";
 import Jumbotron from "../components/Jumbotron"
+
+
 
 
 class Search extends Component {
 
     state = {
         searchTerm: "",
-        books: {}
+        books: []
     };
 
     handleInputChange = event => {
@@ -30,27 +32,37 @@ class Search extends Component {
         // When the form is submitted, prevent its default behavior, get recipes update the recipes state
         event.preventDefault();
         API.getBooks(this.state.searchTerm)
-            .then(res => this.setState({ books: res.data.items }))
+            .then(res => {
+                let results = res.data.items;
+                results = results.map(result => {
+
+                    result = {
+                        key: result.id,
+                        title: result.volumeInfo.title,
+                        author: result.volumeInfo.authors,
+                        description: result.volumeInfo.description,
+                        image: result.volumeInfo.imageLinks.thumbnail,
+                        link: result.volumeInfo.infoLink
+                    }
+                    return result;
+                })
+                this.setState({ books: results })
+            })
             .catch(err => console.log(err));
     };
 
     handleBookSave = event => {
-        API.saveBook({
-            title: this.state.title,
-            author: this.state.author,
-            description: this.state.description
-        })
-        .then(res => console.log(res))
-        .catch(err => console.log(err));
+        event.preventDefault();
+        let book = this.state.books.filter( x => x.key === event.target.id);
+        API.saveBook(book[0])
+            .then(res => console.log(res))
+            .catch(err => console.log(err));
     }
 
     render() {
         return (
             <div>
                 <Nav />
-
-
-
                 <Container>
                     <Jumbotron />
                     <Row>
@@ -75,20 +87,10 @@ class Search extends Component {
                             {!this.state.books.length ? (
                                 <h1>Pending Search ...</h1>
                             ) : (
-                                    <BookDetail>
-                                        {this.state.books.map(volume => {
-                                            return (
-                                                <BookListItem
-                                                    title={volume.volumeInfo.title}
-                                                    author={volume.volumeInfo.authors}
-                                                    image={volume.volumeInfo.imageLinks.thumbnail}
-                                                    description={volume.volumeInfo.description}
-                                                    previewLink={volume.volumeInfo.previewLink}
-                                                    // handleBookSave={handleBookSave()}
-                                                />
-                                            )
-                                        })}
-                                    </BookDetail>
+                                <BookDetail
+                                    books={this.state.books}
+                                    handleBookSave={this.handleBookSave}
+                                ></BookDetail>
                                 )}
                         </Col>
                     </Row>
