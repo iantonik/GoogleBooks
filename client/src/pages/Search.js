@@ -34,6 +34,16 @@ class Search extends Component {
             .catch(err => console.log(err));
     };
 
+    handleBookSave = event => {
+        API.saveBook({
+            title: this.state.title,
+            author: this.state.author,
+            description: this.state.description
+        })
+        .then(res => console.log(res))
+        .catch(err => console.log(err));
+    }
+
     render() {
         return (
             <div>
@@ -74,6 +84,7 @@ class Search extends Component {
                                                     image={volume.volumeInfo.imageLinks.thumbnail}
                                                     description={volume.volumeInfo.description}
                                                     previewLink={volume.volumeInfo.previewLink}
+                                                    // handleBookSave={handleBookSave()}
                                                 />
                                             )
                                         })}

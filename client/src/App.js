@@ -5,6 +5,7 @@ import logo from "./logo.svg";
 import "./App.css";
 
 import Search from "./pages/Search";
+import Saved from "./pages/Saved"
 
 
 class App extends Component {
@@ -14,7 +15,7 @@ class App extends Component {
       <div>
         <Switch>
           <Route exact path="/" component={Search} />
-
+          <Route exact path="/saved" component={Saved} />
         </Switch>
       </div>
     </Router>
