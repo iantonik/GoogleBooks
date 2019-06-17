@@ -9,6 +9,9 @@ export function SavedBooks(props) {
                 <li>
                     <div className="card mt-5 ">
                         <div className="card-body">
+                            <span className="delete-btn float-right" id={book._id} onClick={(event) => props.handleDelete(event)} role="button">
+                                ✗
+                            </span>
                             <h3>{book.title}</h3>
                             <h4>Written by: {book.author} </h4>
                             <img src={book.image} alt={book.title} className="img-thumbnail float-left mr-3"></img>
@@ -18,7 +21,7 @@ export function SavedBooks(props) {
                     </div>
                 </li>
             ))}
-            </div>
+        </div>
     )
 }
 

@@ -19,8 +19,6 @@ class Search extends Component {
     };
 
     handleInputChange = event => {
-        // Destructure the name and value properties off of event.target
-        // Update the appropriate state
         const { name, value } = event.target;
         this.setState({
             [name]: value
@@ -29,7 +27,6 @@ class Search extends Component {
 
 
     handleFormSubmit = event => {
-        // When the form is submitted, prevent its default behavior, get recipes update the recipes state
         event.preventDefault();
         API.getBooks(this.state.searchTerm)
             .then(res => {
